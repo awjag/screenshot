@@ -10,3 +10,9 @@ xclip - https://github.com/astrand/xclip (or sudo pacman -S xclip)
 Shift+C copies the selected image to your clipboard, so you can Ctrl+v it into an image editor or some other program.
 
 Shift+S saves the selected region of the image to TEMPORARY_FILE_DIRECTORY/screenshots/screenshot-n.png, where n is the nth screenshot.
+
+Planned to-dos/features: 
+- a better way to save the image (e.g. select a directory, type in a file name, etc.)
+- clean up the code
+
+next update: probably never
