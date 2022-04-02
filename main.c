@@ -9,41 +9,6 @@
 #define TEMPORARY_SCREENSHOT_FILE "temp.temp.temp.DELETE_ME_IF_I_EXIST.png"
 #define FONT_NAME "DejaVuSansMono.ttf"
 
-
-/*
-bool isLess(sfVector2f a, sfVector2f b){
-	return a.x < b.x || a.y < b.y;
-}
-*/
-
-/*
-int whichIsFirst(std::string a, std::string b){
-	if(a.length() == 0){
-		return 0;
-	}
-	if(b.length () == 0){
-		return 1;
-	}
-	int shorterLength = a.length();
-	if(b.length() < shorterLength){
-		shorterLength = b.length();
-	}
-	for(int i = 0; i < shorterLength; i++){
-		if(a[i] < b[i]){
-			return 0;
-		}else if(b[i] < a[i]){
-			return 1;
-		}
-	}
-	if(a.length() < b.length()){
-		return 0;
-	}else{
-		return 1;
-	}
-	return 0; // this is IMPOSSIBLE!
-}
-*/
-
 int isValidCharForFilenames(char a_character){
 	if (a_character >= 65 && a_character <= 90){
 		return 1;
@@ -69,25 +34,11 @@ void updateFilenames(DIR* dir, char* directory, char* allFiletypes, char** allFi
 		printf("Error opening directory!\n");
 		return;
 	}
-	//allFilenames[0] = "..";
 	for(int i = 1; i < 100; i++){
 		for(int j = 0; j < 100; j++){
 			allFilenames[i][j] = 0;
 		}
-		//printf("lel\n");
-		//allFilenames[i] = "";
-		//strcpy(allFilenames[i], j);
 	}
-	/*
-	int fileCount = 1; // ..
-	while((ent=readdir(dir)) != NULL){
-		if(ent->d_name[0] == '.'){
-			continue;
-		}
-		fileCount++;
-	}
-	*/
-	//dir=opendir(directory);
 	int i = 1;
 	struct dirent* ent;
 	while((ent=readdir(dir)) != NULL){
@@ -95,63 +46,21 @@ void updateFilenames(DIR* dir, char* directory, char* allFiletypes, char** allFi
 		if(ent->d_name[0] == '.'){
 			continue;
 		}
-		//allFilenames[i] = ent->d_name;
-		//printf("%s filename\n", ent->d_name);
-
-		/*
-		for(int a = 0; a < strlen(ent->d_name); a++){
-			printf("%d, %d\n", i, a);
-			allFilenames[i][a] = ent->d_name[a];
-		}
-		*/
-
 		strcpy(allFilenames[i], ent->d_name);
 		allFiletypes[i] = ent->d_type;
-		//printf("%d %s\n", allFiletypes[i], allFilenames[i]);
 		i++;
 	}
 	*filesInDir = i;
 	closedir(dir);
-	/*
-	for(i = 0; i < *filesInDir; i++){
-		printf("%d %s\n", allFiletypes[i], allFilenames[i]);
-	}
-	*/
 }
 
 void setFilenames(char** allFilenames){
 	for(int i = 0; i < 100; i++){
 		for(int j = 0; j < 100; j++){
-	//printf("hi\n");
 			allFilenames[i][j] = rand() % 26 + 65;
 		}
 	}
 }
-
-/*
-int attemptToDescend(DIR* dir, char* directory, const char* subdirectory){
-	printf("currently in %s, now going down to %s.\n", directory, subdirectory);
-	int len = strlen(directory);
-	int len2 = strlen(subdirectory);
-	char newDirectory[len+len2+2];
-	strcpy(newDirectory, directory);
-	for(int i = 0; i < len2; i++){
-		newDirectory[i+len] = subdirectory[i];
-	}
-	newDirectory[len+len2] = '/';
-	newDirectory[len+len2+1] = 0;
-	dir = opendir(newDirectory);
-	if( dir != NULL ){
-		strcpy(directory, newDirectory);
-		printf("%s new dir, lel\n", directory);
-		closedir(dir);
-		return 1;
-	}else{
-		printf("Error opening directory: %s\n", newDirectory);
-		return 0;
-	}
-}
-*/
 
 int attemptToDescend(DIR* dir, char* directory, int indexOfSubdirectoryString, const char* allFiletypes, const char** allFilenames){
 	if(allFiletypes[indexOfSubdirectoryString] != 4){ // 4 = dir
@@ -188,9 +97,6 @@ char* concat(char* a, char* b){
 	}
 	strcat(returned, a);
 	strcat(returned, b);
-	//strcpy(returned, a);
-	//strcpy(&returned[strlen(a)], b);
-	//printf("returned: %s\n", returned);
 	return returned;
 }
 
@@ -199,7 +105,6 @@ int main(){
 
 	sfRenderWindow* window = sfRenderWindow_create( (sfVideoMode){.width=1366, .height=768, .bitsPerPixel=24}, "Take Screenshot", sfFullscreen, NULL);
 	sfRenderWindow_setFramerateLimit(window, 40);
-	//sfRenderWindow_setPosition(window, (sfVector2i){.x=400, .y=130});
 
 	sfImage* originalImage = sfImage_createFromFile(TEMPORARY_SCREENSHOT_DIRECTORY TEMPORARY_SCREENSHOT_FILE);
 
@@ -268,28 +173,11 @@ int main(){
 			selectedRegion.width = endPoint.x  - selectedRegion.left;
 			selectedRegion.height = endPoint.y - selectedRegion.top;
 
-			/*
-			if(selectedRegion.width < 0){
-				selectedRegion.width  = -selectedRegion.width;
-				selectedRegion.left  -=  selectedRegion.width;
-
-				sfRectangleShape_setPosition(dispImageSelectedBorder, (sfVector2f){selectedRegion.left, selectedRegion.top});
-				sfSprite_setPosition(dispImageSelected, (sfVector2f){selectedRegion.left, selectedRegion.top});
-			}
-			if(selectedRegion.height < 0){
-				selectedRegion.height = -selectedRegion.height;
-				selectedRegion.top   -=  selectedRegion.height;
-
-				sfRectangleShape_setPosition(dispImageSelectedBorder, (sfVector2f){selectedRegion.left, selectedRegion.top});
-				sfSprite_setPosition(dispImageSelected, (sfVector2f){selectedRegion.left, selectedRegion.top});
-			}
-			*/
 			if(sfKeyboard_isKeyPressed(sfKeyLShift)){
 				selectedRegion.width -= selectedRegion.width % 10;
 				selectedRegion.height -= selectedRegion.height % 10;
 			}
-			//sfSprite_setPosition(dispImageSelected, (sfVector2f){selectedRegion.left, selectedRegion.top});
-
+			
 			sfIntRect region = selectedRegion;
 			if(region.width < 0){
 				region.width *= -1;
@@ -335,11 +223,6 @@ int main(){
 						}
 					}
 					savingToFile = 1;
-					/*
-					sfImage_saveToFile(output, TEMPORARY_SCREENSHOT_DIRECTORY "screenshots/TEMP_TEMP_TEMP_TEMP_output.png");
-					system("mv " TEMPORARY_SCREENSHOT_DIRECTORY "screenshots/TEMP_TEMP_TEMP_TEMP_output.png " TEMPORARY_SCREENSHOT_DIRECTORY "screenshots/screenshot-\"$(ls " TEMPORARY_SCREENSHOT_DIRECTORY "screenshots/ | wc -l)\".png");
-					sfRenderWindow_close(window);
-					*/
 					sfRenderWindow_close(window);
 					break;
 				}else if(sfKeyboard_isKeyPressed(sfKeyC)){
@@ -370,7 +253,6 @@ int main(){
 							sfImage_setPixel(output, x, y, sfImage_getPixel(originalImage, selectedRegion.left+x, selectedRegion.top+y));
 						}
 					}
-					//printf("HEEYA GO!\n");
 					sfImage_saveToFile(output, TEMPORARY_SCREENSHOT_DIRECTORY "screenshots/TEMP_TEMP_TEMP_TEMP_output.png");
 					system("cat " TEMPORARY_SCREENSHOT_DIRECTORY "screenshots/TEMP_TEMP_TEMP_TEMP_output.png | xclip -selection clipboard -target image/png -i");
 					sfRenderWindow_close(window);
@@ -397,28 +279,10 @@ int main(){
 			sfRectangleShape_setPosition(displayFileBackground, (sfVector2f){0, 0});
 
 		DIR* dir;
-		//if( (dir=opendir(TEMPORARY_SCREENSHOT_DIRECTORY)) == NULL){
-		//	printf("Error opening directory!\n");
-		//	return 0;
-		//}
 		struct dirent* ent;
 		int filesInDir = 1;
-		//int fileCount = 1; // ..
-		/*
-		while((ent=readdir(dir)) != NULL){
-			if(ent->d_name[0] == '.'){
-				continue;
-			}
-			//fileCount++;
-		}
-		closedir(dir);
-		*/
 		char filetypes[128];
-		//char* filenames[128];
-		//char filenames[128][128];
-
-		/*
-		*/
+		
 		char** filenames = malloc(sizeof(char*) * 128);
 		for(int i = 0; i < 128; i++){
 			filenames[i] = malloc(sizeof(char) * 128);
@@ -428,27 +292,10 @@ int main(){
 		filenames[0][0] = '.';
 		filenames[0][1] = '.';
 		filenames[0][2] = 0;
-		/*
-		filenames[0] = "..";
-		*/
 		char directory[200] = TEMPORARY_SCREENSHOT_DIRECTORY;
-		/*
-		dir=opendir(directory);
-		int i = 1;
-		while((ent=readdir(dir)) != NULL){
-			if(ent->d_name[0] == '.'){
-				continue;
-			}
-			filenames[i] = ent->d_name;
-			i++;
-			filesInDir++;
-		}
-		*/
-
-		updateFilenames(dir, directory, filetypes, filenames, &filesInDir);
-		//setFilenames(filenames); filesInDir = 100;
 		
-		//for(int i = 0; i < filesInDir; i++) printf("%s\n", filenames[i]);
+		updateFilenames(dir, directory, filetypes, filenames, &filesInDir);
+		
 		char fileToSaveAs[100];
 		int fileToSaveAs_cursorLoc = 0;
 		int fileToSaveAs_cursorLocMax = 100;
@@ -494,14 +341,12 @@ int main(){
 						}
 					}else if(e.text.unicode == 13){
 						char* xd = concat(directory, fileToSaveAs);
-						//printf("xd: %s\n", xd);
 						sfImage_saveToFile(output, xd);
 						sfRenderWindow_close(window);
 						free(xd);
 						break;
 					}
 				}else if(e.type == sfEvtMouseWheelScrolled){
-					//printf("fowkjf %f\n", e.mouseWheelScroll.delta);
 					if(e.mouseWheelScroll.delta < 0.0f){
 						if(firstFileToDisplay < filesInDir-1){
 							firstFileToDisplay += 1;
@@ -511,18 +356,11 @@ int main(){
 							firstFileToDisplay -= 1;
 						}
 					}
-					//firstFileToDisplay -= e.mouseWheelScroll.delta;
 				}
 			}
 			sfRenderWindow_clear(window, sfBlack);
 			mousePos = sfMouse_getPosition(window);
-			//printf("DIR: %s\n", directory);
 			for(int i = firstFileToDisplay; i < firstFileToDisplay+filesToDisplay; i++){
-				/*
-				if(i-firstFileToDisplay*displayFileBackgroundHeight > saveAsDialogBoxHeight){
-					break;
-				}
-				*/
 				if(filenames[i] == "") break;
 				sfRectangleShape_setFillColor(displayFileBackground, (sfColor){20, 20, 20, 255});
 				if(mousePos.x > 0 && mousePos.x < saveAsDialogBoxWidth){
@@ -531,17 +369,14 @@ int main(){
 						if(sfMouse_isButtonPressed(sfMouseLeft)){
 							if(jc) continue;
 							jc = 1;
-							//if(filenames[i] == ".."){
 							if(i == 0){
 								if(strlen(directory) > 1){
 									for(int j = strlen(directory)-2; j > 0; j--){
 										if(directory[j] == '/'){
-											//printf("%s new dir\n", directory);
 											break;
 										}
 										directory[j] = 0;
 									}
-									//printf("GOING UP!!\n");
 									updateFilenames(dir, directory, filetypes, filenames, &filesInDir);
 									break;
 								}
@@ -564,49 +399,15 @@ int main(){
 				sfRenderWindow_drawRectangleShape(window, displayFileBackground, NULL);
 				sfText_setPosition(displayFileName, (sfVector2f){0, (i-firstFileToDisplay)*displayFileBackgroundHeight});
 				sfText_setString(displayFileName, filenames[i]);
-				//if(sfKeyboard_isKeyPressed(sfKeyA)){
-				//printf("\t%d %s of len %d, first char '%c'\n", i, filenames[i], strlen(filenames[i]), filenames[i][0]);
-				//}
 				if(sfKeyboard_isKeyPressed(sfKeyU)){
 				updateFilenames(dir, directory, filetypes, filenames, &filesInDir);
 				}
 				sfRenderWindow_drawText(window, displayFileName, NULL);
 			}
 			
-				/*
-			if(sfKeyboard_isKeyPressed(sfKeyT)){ if(jpScroll==0)firstFileToDisplay--;jpScroll=1; }
-			else if(sfKeyboard_isKeyPressed(sfKeyG)){ if(jpScroll==0)firstFileToDisplay++;jpScroll=1; }
-			else jpScroll = 0;
-			*/
-
-			/*
-			if(sfKeyboard_isKeyPressed(sfKeyA))
-				for(int i=0;i<filesInDir;i++){
-				//printf("\t%d %s of len %d, chars::: ", i, filenames[i], strlen(filenames[i]));
-				for(int j=0;j<strlen(filenames[i]);j++){
-					printf("'%c' ", filenames[i][j]);
-				}
-					printf("\n");
-				}
-			*/
 			sfRenderWindow_drawText(window, displayFileToSaveAs, NULL);
 			sfRenderWindow_display(window);
 			
-			// for some reason, it fails to display properly unless I RELOAD the text??? WTF??
-			// TODO: FIX THIS GARBAGE
-			/*
-			if(aafdsa++ <= 1){
-				updateFilenames(dir, directory, filetypes, filenames, &filesInDir);
-			}
-			*/
 		}
 	}
-	//sfImage* output = sfImage_create( selectedRegion.width, selectedRegion.height ); /*filename*/
-					//system("mv " TEMPORARY_SCREENSHOT_DIRECTORY "screenshots/TEMP_TEMP_TEMP_TEMP_output.png " TEMPORARY_SCREENSHOT_DIRECTORY "screenshots/screenshot-\"$(ls " TEMPORARY_SCREENSHOT_DIRECTORY "screenshots/ | wc -l)\".png");
-	/*
-					sfImage_saveToFile(output, TEMPORARY_SCREENSHOT_DIRECTORY "screenshots/TEMP_TEMP_TEMP_TEMP_output.png");
-					system("mv " TEMPORARY_SCREENSHOT_DIRECTORY "screenshots/TEMP_TEMP_TEMP_TEMP_output.png " TEMPORARY_SCREENSHOT_DIRECTORY "screenshots/screenshot-\"$(ls " TEMPORARY_SCREENSHOT_DIRECTORY "screenshots/ | wc -l)\".png");
-					*/
-	/*
-*/
 }
