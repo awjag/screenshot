@@ -12,7 +12,7 @@ Shift+C copies the selected image to your clipboard, so you can Ctrl+v it into a
 Shift+S saves the selected region of the image to TEMPORARY_FILE_DIRECTORY/screenshots/screenshot-n.png, where n is the nth screenshot.
 
 Planned to-dos/features: 
-- a better way to save the image (e.g. select a directory, type in a file name, etc.)
-- clean up the code
+- [Already added] a better way to save the image (e.g. select a directory, type in a file name, etc.)
+- [uhh... never] clean up the code
 
 next update: probably never
