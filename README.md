@@ -13,6 +13,6 @@ Shift+S saves the selected region of the image to TEMPORARY_FILE_DIRECTORY/scree
 
 Planned to-dos/features: 
 - [Already added] a better way to save the image (e.g. select a directory, type in a file name, etc.)
-- [uhh... never] clean up the code
+- clean up the code
 
 next update: probably never
