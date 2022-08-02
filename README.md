@@ -9,6 +9,8 @@ TEMPORARY_SCREENSHOT_FILE - the filename of the temporary screenshot. For exampl
 
 FONT_NAME - the path to the font. Make sure it is a .ttf font.
 
+the other macros are self explanatory so I won't explain them...
+
 # Dependencies
 
 CSFML - https://github.com/SFML/CSFML (or sudo pacman -S csfml)
@@ -26,3 +28,4 @@ Planned to-dos/features:
 - clean up the code
 
 next update: probably never
+edit: I actually did end up editing it
