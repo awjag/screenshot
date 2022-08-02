@@ -1,7 +1,7 @@
 # screenshot
 Simple screenshotting utility written in C, uses CSFML, shotgun, xclip  
 
-CSFML - https://github.com/SFML/CSFML
+CSFML - https://github.com/SFML/CSFML (or sudo pacman -S csfml)
 
 shotgun - https://github.com/neXromancers/shotgun (or sudo pacman -S shotgun)
 
