@@ -1,6 +1,15 @@
 # screenshot
 Simple screenshotting utility written in C, uses CSFML, shotgun, xclip  
 
+# How to use
+
+Edit the source code and change the C macros to suit your needs.
+TEMPORARY_SCREENSHOT_DIRECTORY - Where to place screenshots temporarily. I recommend ~/.cache/ or something.
+TEMPORARY_SCREENSHOT_FILE - the filename of the temporary screenshot. For example, "temp_screenshot.png", and this file is saved to the directory specified by TEMPORARY_SCREENSHOT_DIRECTORY
+FONT_NAME - the path to the font. Make sure it is a .ttf font.
+
+# Dependencies
+
 CSFML - https://github.com/SFML/CSFML (or sudo pacman -S csfml)
 
 shotgun - https://github.com/neXromancers/shotgun (or sudo pacman -S shotgun)
