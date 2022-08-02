@@ -4,10 +4,14 @@
 #include <dirent.h>
 #include <string.h>
 
-//create a subdirctory under TEMPORARY_SCREENSHOT_DIRECTORY, name it "screenshots". There, your screenshots will be stored.
-#define TEMPORARY_SCREENSHOT_DIRECTORY "/home/abdulwahab/documents/projects-010/screenshot/"
-#define TEMPORARY_SCREENSHOT_FILE "temp.temp.temp.DELETE_ME_IF_I_EXIST.png"
-#define FONT_NAME "DejaVuSansMono.ttf"
+#define TEMPORARY_SCREENSHOT_FILE "/home/jag/.cache/temp_screenshot.png"
+#define FONT_NAME "/home/jag/Documents/git-stuff/screenshot/DejaVuSansMono.ttf"
+
+#define SAVE_FILE_DIALOG_BOX_WIDTH 500
+#define SAVE_FILE_DIALOG_BOX_HEIGHT 500
+
+#define FILE_NAME_CHARACTER_SIZE 14
+#define FILE_NAME_BACKGROUND_HEIGHT 23
 
 int isValidCharForFilenames(char a_character){
 	if (a_character >= 65 && a_character <= 90){
@@ -101,14 +105,14 @@ char* concat(char* a, char* b){
 }
 
 int main(){
-	system("shotgun " TEMPORARY_SCREENSHOT_DIRECTORY TEMPORARY_SCREENSHOT_FILE);
+	system("shotgun " TEMPORARY_SCREENSHOT_FILE);
 
 	sfRenderWindow* window = sfRenderWindow_create( (sfVideoMode){.width=1366, .height=768, .bitsPerPixel=24}, "Take Screenshot", sfFullscreen, NULL);
 	sfRenderWindow_setFramerateLimit(window, 40);
 
-	sfImage* originalImage = sfImage_createFromFile(TEMPORARY_SCREENSHOT_DIRECTORY TEMPORARY_SCREENSHOT_FILE);
+	sfImage* originalImage = sfImage_createFromFile(TEMPORARY_SCREENSHOT_FILE);
 
-	sfTexture* dispImageT = sfTexture_createFromFile(TEMPORARY_SCREENSHOT_DIRECTORY TEMPORARY_SCREENSHOT_FILE, NULL);
+	sfTexture* dispImageT = sfTexture_createFromFile(TEMPORARY_SCREENSHOT_FILE, NULL);
 
 	sfSprite* dispImageWhole = sfSprite_create();
 		sfSprite_setTexture(dispImageWhole, dispImageT, sfFalse);
@@ -127,7 +131,7 @@ int main(){
 	sfIntRect selectedRegion = (sfIntRect){0, 0, 0, 0};
 		sfSprite_setTextureRect(dispImageSelected, selectedRegion);
 	
-	sfFont* dispRegionSizeFont = sfFont_createFromFile(TEMPORARY_SCREENSHOT_DIRECTORY FONT_NAME);
+	sfFont* dispRegionSizeFont = sfFont_createFromFile(FONT_NAME);
 	sfText* dispRegionSize = sfText_create();
 		sfText_setFont(dispRegionSize, dispRegionSizeFont);
 		sfText_setCharacterSize(dispRegionSize, 25);
@@ -253,8 +257,8 @@ int main(){
 							sfImage_setPixel(output, x, y, sfImage_getPixel(originalImage, selectedRegion.left+x, selectedRegion.top+y));
 						}
 					}
-					sfImage_saveToFile(output, TEMPORARY_SCREENSHOT_DIRECTORY "screenshots/TEMP_TEMP_TEMP_TEMP_output.png");
-					system("cat " TEMPORARY_SCREENSHOT_DIRECTORY "screenshots/TEMP_TEMP_TEMP_TEMP_output.png | xclip -selection clipboard -target image/png -i");
+					sfImage_saveToFile(output, TEMPORARY_SCREENSHOT_FILE);
+					system("cat " TEMPORARY_SCREENSHOT_FILE " | xclip -selection clipboard -target image/png -i");
 					sfRenderWindow_close(window);
 					break;
 				}
@@ -267,14 +271,11 @@ int main(){
 		sfRenderWindow_display(window);
 	}
 	if(savingToFile == 1){
-		int saveAsDialogBoxWidth  = 500;
-		int saveAsDialogBoxHeight = 500;
-		window = sfRenderWindow_create( (sfVideoMode){.width=saveAsDialogBoxWidth, .height=saveAsDialogBoxWidth, .bitsPerPixel=24}, "Save Screenshot", sfClose, NULL);
+		window = sfRenderWindow_create( (sfVideoMode){.width=SAVE_FILE_DIALOG_BOX_WIDTH, .height=SAVE_FILE_DIALOG_BOX_HEIGHT, .bitsPerPixel=24}, "Save Screenshot", sfClose, NULL);
 		sfRenderWindow_setFramerateLimit(window, 40);
 		sfRenderWindow_setPosition(window, (sfVector2i){.x=250, .y=130});
 		sfRectangleShape* displayFileBackground = sfRectangleShape_create();
-		int displayFileBackgroundHeight = 23;
-			sfRectangleShape_setSize(displayFileBackground, (sfVector2f){.x=sfRenderWindow_getSize(window).x, displayFileBackgroundHeight});
+			sfRectangleShape_setSize(displayFileBackground, (sfVector2f){.x=sfRenderWindow_getSize(window).x, FILE_NAME_BACKGROUND_HEIGHT});
 			sfRectangleShape_setFillColor(displayFileBackground, (sfColor){20, 20, 20, 255});
 			sfRectangleShape_setPosition(displayFileBackground, (sfVector2f){0, 0});
 
@@ -292,7 +293,7 @@ int main(){
 		filenames[0][0] = '.';
 		filenames[0][1] = '.';
 		filenames[0][2] = 0;
-		char directory[200] = TEMPORARY_SCREENSHOT_DIRECTORY;
+		char directory[200] = "/home/jag/";
 		
 		updateFilenames(dir, directory, filetypes, filenames, &filesInDir);
 		
@@ -302,7 +303,7 @@ int main(){
 
 		sfText* displayFileName = sfText_create();
 			sfText_setFont(displayFileName, dispRegionSizeFont);
-			sfText_setCharacterSize(displayFileName, 14);
+			sfText_setCharacterSize(displayFileName, FILE_NAME_CHARACTER_SIZE);
 			sfText_setFillColor(displayFileName, sfWhite);
 
 		sfText* displayFileToSaveAs = sfText_create();
@@ -363,8 +364,8 @@ int main(){
 			for(int i = firstFileToDisplay; i < firstFileToDisplay+filesToDisplay; i++){
 				if(filenames[i] == "") break;
 				sfRectangleShape_setFillColor(displayFileBackground, (sfColor){20, 20, 20, 255});
-				if(mousePos.x > 0 && mousePos.x < saveAsDialogBoxWidth){
-					if(mousePos.y >= (i-firstFileToDisplay)*displayFileBackgroundHeight && mousePos.y < (i-firstFileToDisplay+1)*displayFileBackgroundHeight){
+				if(mousePos.x > 0 && mousePos.x < SAVE_FILE_DIALOG_BOX_WIDTH){
+					if(mousePos.y >= (i-firstFileToDisplay)*FILE_NAME_BACKGROUND_HEIGHT && mousePos.y < (i-firstFileToDisplay+1)*FILE_NAME_BACKGROUND_HEIGHT){
 						sfRectangleShape_setFillColor(displayFileBackground, (sfColor){50, 50, 50, 255});
 						if(sfMouse_isButtonPressed(sfMouseLeft)){
 							if(jc) continue;
@@ -395,9 +396,9 @@ int main(){
 						}
 					}
 				}
-				sfRectangleShape_setPosition(displayFileBackground, (sfVector2f){0, (i-firstFileToDisplay)*displayFileBackgroundHeight});
+				sfRectangleShape_setPosition(displayFileBackground, (sfVector2f){0, (i-firstFileToDisplay)*FILE_NAME_BACKGROUND_HEIGHT});
 				sfRenderWindow_drawRectangleShape(window, displayFileBackground, NULL);
-				sfText_setPosition(displayFileName, (sfVector2f){0, (i-firstFileToDisplay)*displayFileBackgroundHeight});
+				sfText_setPosition(displayFileName, (sfVector2f){0, (i-firstFileToDisplay)*FILE_NAME_BACKGROUND_HEIGHT});
 				sfText_setString(displayFileName, filenames[i]);
 				if(sfKeyboard_isKeyPressed(sfKeyU)){
 				updateFilenames(dir, directory, filetypes, filenames, &filesInDir);
