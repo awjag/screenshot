@@ -4,8 +4,8 @@
 #include <dirent.h>
 #include <string.h>
 
-#define TEMPORARY_SCREENSHOT_FILE "/home/jag/.cache/temp_screenshot.png"
-#define FONT_NAME "/home/jag/Documents/git-stuff/screenshot/DejaVuSansMono.ttf"
+#define TEMPORARY_SCREENSHOT_FILE "/home/ape/.cache/temp_screenshot.png"
+#define FONT_NAME "/home/ape/repos/screenshot/DejaVuSansMono.ttf"
 
 #define SAVE_FILE_DIALOG_BOX_WIDTH 500
 #define SAVE_FILE_DIALOG_BOX_HEIGHT 500
@@ -159,8 +159,8 @@ int main(){
 		if(!editingSelectedRegion){
 			if(sfMouse_isButtonPressed(sfMouseLeft)){
 				editingSelectedRegion = 1;
-				selectedRegion.left = sfMouse_getPosition(window).x;
-				selectedRegion.top = sfMouse_getPosition(window).y;
+				selectedRegion.left = sfMouse_getPosition((sfWindow*)window).x;
+				selectedRegion.top = sfMouse_getPosition((sfWindow*)window).y;
 				selectedRegion.width = 0;
 				selectedRegion.height= 0;
 				sfSprite_setTextureRect(dispImageSelected, selectedRegion);
@@ -173,7 +173,7 @@ int main(){
 			if(!sfMouse_isButtonPressed(sfMouseLeft)){
 				editingSelectedRegion = 0;
 			}
-			endPoint = sfMouse_getPosition(window);
+			endPoint = sfMouse_getPosition((sfWindow*)window);
 			selectedRegion.width = endPoint.x  - selectedRegion.left;
 			selectedRegion.height = endPoint.y - selectedRegion.top;
 
@@ -293,11 +293,14 @@ int main(){
 		filenames[0][0] = '.';
 		filenames[0][1] = '.';
 		filenames[0][2] = 0;
-		char directory[200] = "/home/jag/";
+		char directory[200] = "/home/ape/";
 		
 		updateFilenames(dir, directory, filetypes, filenames, &filesInDir);
 		
 		char fileToSaveAs[100];
+		for(int i =0;i<100;i++){
+			fileToSaveAs[i] = 0;
+		}
 		int fileToSaveAs_cursorLoc = 0;
 		int fileToSaveAs_cursorLocMax = 100;
 
@@ -359,8 +362,9 @@ int main(){
 					}
 				}
 			}
+			printf("hello %s\n", fileToSaveAs);
 			sfRenderWindow_clear(window, sfBlack);
-			mousePos = sfMouse_getPosition(window);
+			mousePos = sfMouse_getPosition((sfWindow*)window);
 			for(int i = firstFileToDisplay; i < firstFileToDisplay+filesToDisplay; i++){
 				if(filenames[i] == "") break;
 				sfRectangleShape_setFillColor(displayFileBackground, (sfColor){20, 20, 20, 255});
@@ -382,7 +386,7 @@ int main(){
 									break;
 								}
 							}else{
-								int result = attemptToDescend(dir, directory, i, filetypes, filenames);
+								int result = attemptToDescend(dir, directory, i, filetypes, (const char**)filenames);
 								if(result == 1){ // if a directory
 									updateFilenames(dir, directory, filetypes, filenames, &filesInDir);
 								}else{

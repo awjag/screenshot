@@ -1,2 +1,2 @@
 main: main.c
-	gcc main.c -o main -lcsfml-graphics -lcsfml-window -lcsfml-system -L/usr/local/lib 
+	gcc main.c -o screenshot -lcsfml-graphics -lcsfml-window -lcsfml-system
